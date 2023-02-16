@@ -52,6 +52,15 @@ class TemperatureInput extends React.Component {
     }
 }
 
+function Button ({type, children}) {
+    const className = 'btn btn-' + type
+    return <button className={className}>{children}</button>
+}
+
+function PrimaryButton ({children}) {
+    return <Button type="primary">{children}</Button>
+}
+
 class Calculator extends React.Component {
 
     constructor (props) {
@@ -86,8 +95,9 @@ class Calculator extends React.Component {
             <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
             <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange}/>
             <BoilingVerdict celsius={celsius} />
+            <Button type="primary">Envoye</Button>
         </div>
     }
 }
 
-ReactDOM.render(<Calculator/>, document.querySelector("#tp"))
+//ReactDOM.render(<Calculator/>, document.querySelector("#tp"))
