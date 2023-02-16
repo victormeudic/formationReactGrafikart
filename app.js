@@ -1,138 +1,61 @@
-function WelcomeFunc ({name, children}) {
-    return <div>
-        <h1>Bonjour {name}</h1>
-        <p>{children}</p>
-    </div>
-}
+class Field extends React.Component {
 
-class Welcome extends React.Component {
-
-    render() {
+    render () {
+        const {name, value, onChange, children} = this.props
         return <div>
-        <h1>Bonjour {this.props.name}</h1>
-        <p>{this.props.children}</p>
-    </div>
-    }
-}
-
-class Clock extends React.Component {
-
-    constructor (props) {
-        super (props)
-        this.state = {date: new Date()}
-        this.timer = null
-    }
-
-    componentDidMount () {
-        this.timer = window.setInterval(this.tick.bind(this), 1000)
-    }
-
-    componentwillUnount () {
-        window.clearInterval(this.timer)
-    }
-
-    tick () {
-        this.setState({date: new Date()})
-    }
-
-    render() {
-        return <div>
-            {this.state.date.toLocaleDateString()} {this.state.date.toLocaleTimeString()}
+            <label htmlFor={name}>{children}</label>
+            <input type="text" value={value} onChange={onChange} id={name} name={name} className="form-control"></input>
         </div>
     }
 }
 
-class Incrementer extends React.Component {
-
-    constructor (props) {
-        super(props)
-        this.state = {value: props.start, timer: null}
-        this.toggle = this.toggle.bind(this)
-        this.reset = this.reset.bind(this)
-    }
-
-    componentDidMount () {
-        this.play()
-    }
-
-    componentwillUnount () {
-        window.clearInterval(this.state.timer)    }
-
-    increment () {
-        this.setState(function (state, props) {
-            return {value: state.value + props.step}
-        })
-    }
-
-    pause () {
-        window.clearInterval(this.state.timer)
-        this.setState({
-            timer: null
-        })
-    }
-
-    play () {
-        window.clearInterval(this.state.timer)
-        this.setState({
-            timer: window.setInterval(this.increment.bind(this), 1000)
-        })
-    }
-
-    toggle () {
-        return this.state.timer ? this.pause() : this.play()
-    }
-
-    label () {
-        return this.state.timer ? 'Pause' : 'Play'
-    }
-
-    reset () {
-        this.pause()
-        this.play()
-        this.setState((state, props) => ({value: props.start}))
-    }
-
-    render () {
-        return <div>
-            {this.state.value}
-                <button onClick={this.toggle}>{this.label()}</button>
-                <button onClick={this.reset}>Réinitialiser</button>
-            </div>
-    }
+function Checkbox ({name, value, onChange, children}) {
+    return <div>
+    <input type="checkbox" checked={value} onChange={onChange} id={name} name={name} className="form-control"></input>
+    <label htmlFor={name}>{children}</label>
+</div>
 }
 
-Incrementer.defaultProps = {
-    start: 0,
-    step: 1
-}
-
-class ManualIncrementer extends React.Component {
+class Home extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {n: 0}
+        this.state = {
+            nom: '',
+            prenom: '',
+            newsletter: false
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleChange (e) {
+        const name = e.target.name
+        const type = e.target.type
+        const value = type === 'checkbox' ? e.target.checked : e.target.value
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleSubmit (e) {
+        e.preventDefault()
+        const data = JSON.stringify(this.state)
+        this.setState({
+            nom: '',
+            prenom: '',
+            newsletter: false
+        })
     }
 
     render () {
-        return <div>Valeur incrémenter: {this.state.n} <button onClick={this.increment.bind(this)}>Incrémenter</button></div>
+        return <form onSubmit={this.handleSubmit}>
+            <Field name="nom" value={this.state.nom} onChange={this.handleChange}>Nom</Field>
+            <Field name="prenom" value={this.state.prenom} onChange={this.handleChange}>Prenom</Field>
+            <Checkbox name="newsletter" vlaue={this.state.newsletter} onChange={this.handleChange}>S'abonner a la newsletter</Checkbox>
+            <button>Envoyer</button>
+        </form>
     }
-
-    increment () {
-        this.setState(function (state, props) {
-            return {n: state.n + 1}
-        })
-    }
-}
-
-function Home() {
-    return <div>
-        <Welcome name="Victor" />
-        <Welcome name="Meudic" />
-        <Clock />
-        <Incrementer start={10}/>
-        <Incrementer start={10} step={10}/>
-        <ManualIncrementer />
-    </div>
 }
 
 ReactDOM.render(<Home />, document.querySelector("#app"))
