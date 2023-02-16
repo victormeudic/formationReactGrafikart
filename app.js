@@ -46,17 +46,17 @@ class Incrementer extends React.Component {
 
     constructor (props) {
         super(props)
-        this.state = {value: props.start}
-        this.timer = null
+        this.state = {value: props.start, timer: null}
+        this.toggle = this.toggle.bind(this)
+        this.reset = this.reset.bind(this)
     }
 
     componentDidMount () {
-        this.timer = window.setInterval((this.increment.bind(this)), 1000)
+        this.play()
     }
 
     componentwillUnount () {
-        window.clearInterval(this.timer)
-    }
+        window.clearInterval(this.state.timer)    }
 
     increment () {
         this.setState(function (state, props) {
@@ -64,14 +64,64 @@ class Incrementer extends React.Component {
         })
     }
 
+    pause () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: null
+        })
+    }
+
+    play () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: window.setInterval(this.increment.bind(this), 1000)
+        })
+    }
+
+    toggle () {
+        return this.state.timer ? this.pause() : this.play()
+    }
+
+    label () {
+        return this.state.timer ? 'Pause' : 'Play'
+    }
+
+    reset () {
+        this.pause()
+        this.play()
+        this.setState((state, props) => ({value: props.start}))
+    }
+
     render () {
-        return <p>{this.state.value}</p>
+        return <div>
+            {this.state.value}
+                <button onClick={this.toggle}>{this.label()}</button>
+                <button onClick={this.reset}>Réinitialiser</button>
+            </div>
     }
 }
 
 Incrementer.defaultProps = {
     start: 0,
     step: 1
+}
+
+class ManualIncrementer extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {n: 0}
+    }
+
+    render () {
+        return <div>Valeur incrémenter: {this.state.n} <button onClick={this.increment.bind(this)}>Incrémenter</button></div>
+    }
+
+    increment () {
+        this.setState(function (state, props) {
+            return {n: state.n + 1}
+        })
+    }
 }
 
 function Home() {
@@ -81,6 +131,7 @@ function Home() {
         <Clock />
         <Incrementer start={10}/>
         <Incrementer start={10} step={10}/>
+        <ManualIncrementer />
     </div>
 }
 
