@@ -122,7 +122,7 @@ class FilterableProductsTable extends React.Component {
     }
 }
 
-ReactDOM.render(<FilterableProductsTable products={PRODUCTS}/>, document.getElementById('tpListe'))
+// ReactDOM.render(<FilterableProductsTable products={PRODUCTS}/>, document.getElementById('tpListe'))
 
 const PRODUCTS2 = [...PRODUCTS, {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 8"}
   ];
