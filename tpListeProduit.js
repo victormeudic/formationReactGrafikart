@@ -7,13 +7,13 @@ const PRODUCTS = [
     {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
   ];
 
-function ProductRow ({product}) {
+const ProductRow = React.memo(function ({product}) {
     const name = product.stocked ? product.name : <span className='text-danger'>{product.name}</span>
     return <tr>
         <td>{name}</td>
         <td>{product.price}</td>
     </tr>
-}
+})
 
 function ProductCategoryRow ({category}) {
     return <tr>
@@ -54,7 +54,7 @@ class ProductTable extends React.Component {
     }
 }
 
-class SearchBar extends React.Component {
+class SearchBar extends React.PureComponent {
 
     constructor(props) {
         super(props)
@@ -123,3 +123,11 @@ class FilterableProductsTable extends React.Component {
 }
 
 ReactDOM.render(<FilterableProductsTable products={PRODUCTS}/>, document.getElementById('tpListe'))
+
+const PRODUCTS2 = [...PRODUCTS, {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 8"}
+  ];
+
+  window.setTimeout(function () {
+    ReactDOM.render(<FilterableProductsTable products={PRODUCTS2}/>, 
+    document.getElementById('tpListe'))
+  }, 2000)

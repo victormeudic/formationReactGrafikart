@@ -12,6 +12,12 @@
     <script src="app.js" defer type="text/babel"></script>
     <script src="tpConvertisseurTemperature.js" defer type="text/babel"></script>
     <script src="tpListeProduit.js" defer type="text/babel"></script>
+    <script>
+        function wait(t) {
+            const start = Date.now()
+            while(Date.now() - start < t) {}
+        }
+    </script>
 </head>
 <body>
     <div id="app"></div>
