@@ -32,4 +32,4 @@ class Home extends React.Component {
     }
 }
 
-ReactDOM.render(<Home />, document.getElementById('ref'))
+// ReactDOM.render(<Home />, document.getElementById('ref'))
